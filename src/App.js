@@ -8,6 +8,7 @@ function App() {
     JSON.parse(localStorage.getItem("activities")) || []
   );
   const [weather, setWeather] = useState({});
+  const isGoodWeather = true; // hardcoded for now
 
   useEffect(() => {
     const fetchWeatherData = async () => {
@@ -18,11 +19,15 @@ function App() {
       setWeather(data);
     };
     fetchWeatherData();
-  });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("activities", JSON.stringify(activities));
   }, [activities]);
+
+  const filteredActivities = activities.filter(
+    (activity) => activity.isForGoodWeather === isGoodWeather
+  );
 
   function handleAddActivity(newActivity) {
     const id = uuidv4();
@@ -43,8 +48,8 @@ function App() {
         {weather.condition} {weather.temperature}°C
       </h1>
       <List
-        activities={activities}
-        isGoodWeather={weather.isGoodWeather}
+        activities={filteredActivities}
+        isGoodWeather={isGoodWeather}
         onDeleteActivity={handleDeleteActivity}
       />
       <Form onAddActivity={handleAddActivity} />
