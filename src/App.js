@@ -8,6 +8,8 @@ function App() {
     JSON.parse(localStorage.getItem("activities")) || []
   );
 
+  const [isGoodWeather, setIsGoodWeather] = useState(true);
+
   useEffect(() => {
     localStorage.setItem("activities", JSON.stringify(activities));
   }, [activities]);
@@ -18,10 +20,14 @@ function App() {
     setActivities([...activities, activityWithId]);
   }
 
+  const filteredActivities = activities.filter(
+    (activity) => activity.isForGoodWeather === isGoodWeather
+  );
+
   return (
     <div>
       <Form onAddActivity={handleAddActivity} />
-      <List activities={activities} />
+      <List activities={filteredActivities} isGoodWeather={isGoodWeather} />
     </div>
   );
 }
