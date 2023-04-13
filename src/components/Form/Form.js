@@ -32,7 +32,7 @@ function Form({ onAddActivity }) {
       />
       <label>
         <input type="checkbox" ref={isForGoodWeather} />
-        Is it a good-weather activity?
+        Click here if it is a good-weather activity.
       </label>
       <button type="submit">Add Activity</button>
     </form>

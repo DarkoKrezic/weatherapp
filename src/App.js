@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Form from "./components/Form/Form";
+import List from "./components/List/List";
 
 function App() {
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = useState(
+    JSON.parse(localStorage.getItem("activities")) || []
+  );
+
+  useEffect(() => {
+    localStorage.setItem("activities", JSON.stringify(activities));
+  }, [activities]);
 
   function handleAddActivity(newActivity) {
     const id = uuidv4();
@@ -14,14 +21,7 @@ function App() {
   return (
     <div>
       <Form onAddActivity={handleAddActivity} />
-      <ul>
-        {activities.map((activity) => (
-          <li key={activity.id}>
-            {activity.name} -{" "}
-            {activity.isForGoodWeather ? "good weather" : "bad weather"}
-          </li>
-        ))}
-      </ul>
+      <List activities={activities} />
     </div>
   );
 }
