@@ -1,29 +1,42 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
-export default function Form({ onAddActivity }) {
+function Form({ onAddActivity }) {
   const [name, setName] = useState("");
-  const [isForGoodWeather, setIsForGoodWeather] = useState(false);
+  const isForGoodWeather = useRef();
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const data = {
+      name,
+      isForGoodWeather: isForGoodWeather.current.checked,
+    };
+
+    onAddActivity(data);
+
+    setName("");
+    isForGoodWeather.current.checked = false;
+    document.querySelector("#name").focus();
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Add new activity</h1>
-      <label htmlFor="name">Name</label>
-      <input type="text" id="name" name="name" required />
-      <label htmlFor="isForGoodWeather" name="isForGoodWeather">
-        Good Weather Activity
-      </label>
+      <h2>Add Activity</h2>
+      <label htmlFor="name">Activity Name:</label>
       <input
-        type="checkbox"
-        id="isForGoodWeather"
-        onChange={(currywurst) =>
-          setIsForGoodWeather(currywurst.target.checked)
-        }
+        type="text"
+        id="name"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        required
       />
-      <button type="submit">Submit</button>
+      <label>
+        <input type="checkbox" ref={isForGoodWeather} />
+        Click here if it is a good-weather activity.
+      </label>
+      <button type="submit">Add Activity</button>
     </form>
   );
 }
+
+export default Form;
