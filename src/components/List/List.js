@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function List({ activities, isGoodWeather }) {
+export default function List({ activities, isGoodWeather, onDeleteActivity }) {
   return (
     <>
       <h2>
@@ -13,6 +13,7 @@ export default function List({ activities, isGoodWeather }) {
           <li key={activity.id}>
             {activity.name} -{" "}
             {activity.isForGoodWeather ? "good weather" : "bad weather"}
+            <button onClick={() => onDeleteActivity(activity.id)}>❌</button>
           </li>
         ))}
       </ul>
