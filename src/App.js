@@ -8,7 +8,7 @@ function App() {
     JSON.parse(localStorage.getItem("activities")) || []
   );
   const [weather, setWeather] = useState({});
-  const isGoodWeather = true; // hardcoded for now
+  const [isGoodWeather, setIsGoodWeather] = useState(true);
 
   useEffect(() => {
     const fetchWeatherData = async () => {
@@ -17,17 +17,20 @@ function App() {
       );
       const data = await response.json();
       setWeather(data);
+      setIsGoodWeather(data.isGoodWeather);
     };
-    fetchWeatherData();
+
+    // Fetch weather data every 5 seconds
+    const interval = setInterval(() => {
+      fetchWeatherData();
+    }, 5000);
+
+    return () => clearInterval(interval); // Clear the interval on unmount
   }, []);
 
   useEffect(() => {
     localStorage.setItem("activities", JSON.stringify(activities));
   }, [activities]);
-
-  const filteredActivities = activities.filter(
-    (activity) => activity.isForGoodWeather === isGoodWeather
-  );
 
   function handleAddActivity(newActivity) {
     const id = uuidv4();
@@ -41,6 +44,11 @@ function App() {
     );
     setActivities(filteredActivities);
   }
+
+  // Filter activities based on isGoodWeather
+  const filteredActivities = activities.filter(
+    (activity) => activity.isForGoodWeather === isGoodWeather
+  );
 
   return (
     <div>
